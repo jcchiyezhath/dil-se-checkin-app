@@ -1,0 +1,104 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+}
+
+.app-shell {
+  padding: 20px;
+}
+
+/* HEADER */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 0;
+}
+
+.eyebrow {
+  font-size: 12px;
+  color: gray;
+  margin-bottom: 4px;
+}
+
+/* STATUS */
+.status-pill {
+  background: #ddd;
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+
+/* LAYOUT */
+.main-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+}
+
+/* PANELS */
+.panel {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* BUTTONS */
+.action-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.primary {
+  background: black;
+  color: white;
+}
+
+.secondary {
+  background: #ddd;
+}
+
+/* INPUT */
+.input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* DIVIDER */
+.divider {
+  height: 1px;
+  background: #eee;
+  margin: 20px 0;
+}
+
+/* RESULTS */
+#resultsContainer {
+  margin-top: 10px;
+}
+
+/* MESSAGE */
+.message {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+.hidden {
+  display: none;
+}

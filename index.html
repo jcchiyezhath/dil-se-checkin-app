@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Check-In App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">April 18 Event</p>
+        <h1>Front Desk Control</h1>
+      </div>
+      <span id="connectionStatus" class="status-pill">Not connected</span>
+    </header>
+
+    <main class="main-grid">
+      <section class="panel">
+        <h2>Quick Actions</h2>
+
+        <button id="loadEventsBtn" class="action-btn primary" type="button">
+          Load Events
+        </button>
+
+        <button id="clearResultsBtn" class="action-btn secondary" type="button">
+          Clear Results
+        </button>
+
+        <div class="divider"></div>
+
+        <label for="eventSelect">Select Event</label>
+        <select id="eventSelect" class="input">
+          <option value="">Choose Event</option>
+        </select>
+
+        <div class="divider"></div>
+
+        <h3>Search Guest</h3>
+
+        <label for="searchInput">Name / Email / Order ID</label>
+        <input
+          id="searchInput"
+          class="input"
+          type="text"
+          placeholder="Name / Email / Order ID"
+          autocomplete="off"
+        />
+
+        <button id="searchBtn" class="action-btn primary" type="button">
+          Search
+        </button>
+      </section>
+
+      <section class="panel">
+        <h2>Results</h2>
+
+        <div id="messageBox" class="message hidden"></div>
+
+        <div id="resultsContainer">
+          <p>No results yet</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="apps.js"></script>
+</body>
+</html>
