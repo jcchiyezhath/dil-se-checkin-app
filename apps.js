@@ -1,34 +1,36 @@
 const APP_PASSWORD = 'dilse2026';
 
+const TICKET_TAILOR_LINKS = {
+  CHECKIN: 'https://app.tickettailor.com/event/tickets-issued/7584207',
+  ORDERS: 'https://app.tickettailor.com/orders',
+  CREATE: 'https://app.tickettailor.com/orders#pop=/orders/add',
+  DASHBOARD: 'https://app.tickettailor.com/dashboard',
+};
+
 const loginScreen = document.getElementById('loginScreen');
 const appShell = document.getElementById('appShell');
 const appPassword = document.getElementById('appPassword');
 const loginBtn = document.getElementById('loginBtn');
 const loginMessage = document.getElementById('loginMessage');
 const logoutBtn = document.getElementById('logoutBtn');
-
 const connectionStatus = document.getElementById('connectionStatus');
-const loadEventsBtn = document.getElementById('loadEventsBtn');
-const clearResultsBtn = document.getElementById('clearResultsBtn');
-const searchBtn = document.getElementById('searchBtn');
-const eventSelect = document.getElementById('eventSelect');
-const searchInput = document.getElementById('searchInput');
-const messageBox = document.getElementById('messageBox');
-const resultsContainer = document.getElementById('resultsContainer');
 
 function showLoginMessage(text, type = 'error') {
+  if (!loginMessage) return;
   loginMessage.textContent = text;
   loginMessage.classList.remove('hidden', 'success', 'error');
   loginMessage.classList.add(type);
 }
 
 function hideLoginMessage() {
+  if (!loginMessage) return;
   loginMessage.textContent = '';
   loginMessage.classList.add('hidden');
   loginMessage.classList.remove('success', 'error');
 }
 
 function setStatus(text, type = '') {
+  if (!connectionStatus) return;
   connectionStatus.textContent = text;
   connectionStatus.classList.remove('ok', 'error');
 
@@ -38,6 +40,7 @@ function setStatus(text, type = '') {
 }
 
 function unlockApp() {
+  if (!loginScreen || !appShell) return;
   loginScreen.classList.add('hidden');
   appShell.classList.remove('hidden');
   sessionStorage.setItem('frontDeskUnlocked', 'true');
@@ -55,7 +58,7 @@ function checkLoginState() {
 function handleLogin() {
   hideLoginMessage();
 
-  const value = appPassword.value.trim();
+  const value = appPassword ? appPassword.value.trim() : '';
 
   if (!value) {
     showLoginMessage('Please enter the password.', 'error');
@@ -74,113 +77,89 @@ function handleLogin() {
 
 function handleLogout() {
   sessionStorage.removeItem('frontDeskUnlocked');
-  appShell.classList.add('hidden');
-  loginScreen.classList.remove('hidden');
-  appPassword.value = '';
+
+  if (appShell) {
+    appShell.classList.add('hidden');
+  }
+
+  if (loginScreen) {
+    loginScreen.classList.remove('hidden');
+  }
+
+  if (appPassword) {
+    appPassword.value = '';
+    appPassword.focus();
+  }
+
   hideLoginMessage();
   setStatus('Not connected');
-  appPassword.focus();
 }
 
-function showMessage(text, type = 'success') {
-  messageBox.textContent = text;
-  messageBox.classList.remove('hidden', 'success', 'error');
-  messageBox.classList.add(type);
-}
+function openLink(type) {
+  const url = TICKET_TAILOR_LINKS[type];
 
-function hideMessage() {
-  messageBox.textContent = '';
-  messageBox.classList.add('hidden');
-  messageBox.classList.remove('success', 'error');
-}
-
-function renderPlaceholderResults(title, detail) {
-  resultsContainer.innerHTML = `
-    <div class="result-card">
-      <h3>${title}</h3>
-      <p>${detail}</p>
-    </div>
-  `;
-}
-
-function clearResults() {
-  resultsContainer.innerHTML = '<p>No results yet</p>';
-  searchInput.value = '';
-  eventSelect.value = '';
-  hideMessage();
-  setStatus('Ready', 'ok');
-}
-
-function loadDemoEvents() {
-  const demoEvents = [
-    { id: 'dil-se-main', name: 'Dil Se - April 18 Main Event' },
-    { id: 'vip-entry', name: 'Dil Se - VIP Entry' },
-    { id: 'late-entry', name: 'Dil Se - Late Entry / Walk-In' }
-  ];
-
-  eventSelect.innerHTML = '<option value="">Choose Event</option>';
-
-  for (const event of demoEvents) {
-    const option = document.createElement('option');
-    option.value = event.id;
-    option.textContent = event.name;
-    eventSelect.appendChild(option);
-  }
-
-  setStatus('Demo connected', 'ok');
-  showMessage('Demo events loaded. Next we will connect this safely to Netlify functions.', 'success');
-  renderPlaceholderResults('Events loaded', 'You can now select an event and test the search flow.');
-}
-
-function runDemoSearch() {
-  hideMessage();
-
-  const selectedEvent = eventSelect.value;
-  const query = searchInput.value.trim();
-
-  if (!selectedEvent) {
-    showMessage('Please select an event first.', 'error');
-    setStatus('Event needed', 'error');
+  if (!url || url.includes('PASTE_')) {
+    alert(`Please add the ${type} Ticket Tailor link in apps.js first.`);
     return;
   }
 
-  if (!query) {
-    showMessage('Please type a guest name, email, or order ID.', 'error');
-    setStatus('Search needed', 'error');
+  window.open(url, '_blank', 'noopener');
+}
+
+function toggleHelp() {
+  const helpBox = document.getElementById('helpBox');
+  if (!helpBox) return;
+
+  const isHidden = helpBox.style.display === 'none' || helpBox.style.display === '';
+  helpBox.style.display = isHidden ? 'block' : 'none';
+}
+
+function calculateChange() {
+  const amountDueInput = document.getElementById('amountDue');
+  const amountPaidInput = document.getElementById('amountPaid');
+  const result = document.getElementById('changeResult');
+
+  if (!amountDueInput || !amountPaidInput || !result) return;
+
+  const due = parseFloat(amountDueInput.value);
+  const paid = parseFloat(amountPaidInput.value);
+
+  if (Number.isNaN(due) || Number.isNaN(paid)) {
+    result.textContent = 'Please enter both amounts.';
+    result.style.color = '#991b1b';
     return;
   }
 
-  setStatus('Searching demo...', 'ok');
+  const change = paid - due;
 
-  resultsContainer.innerHTML = `
-    <div class="result-card">
-      <h3>Demo Search Result</h3>
-      <p><strong>Event:</strong> ${eventSelect.options[eventSelect.selectedIndex].text}</p>
-      <p><strong>Search:</strong> ${query}</p>
-      <p>This is only a safe demo screen right now. In the next step, we will connect this to your secure backend so no personal data or API key is exposed in the browser.</p>
-    </div>
-  `;
+  if (change < 0) {
+    result.textContent = `Still owed: $${Math.abs(change).toFixed(2)}`;
+    result.style.color = '#991b1b';
+    return;
+  }
 
-  showMessage('Demo search completed.', 'success');
+  result.textContent = `Change due: $${change.toFixed(2)}`;
+  result.style.color = '#15803d';
 }
 
-loginBtn.addEventListener('click', handleLogin);
-logoutBtn.addEventListener('click', handleLogout);
+window.openLink = openLink;
+window.toggleHelp = toggleHelp;
+window.calculateChange = calculateChange;
 
-appPassword.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') {
-    handleLogin();
-  }
-});
+if (loginBtn) {
+  loginBtn.addEventListener('click', handleLogin);
+}
 
-loadEventsBtn.addEventListener('click', loadDemoEvents);
-clearResultsBtn.addEventListener('click', clearResults);
-searchBtn.addEventListener('click', runDemoSearch);
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', handleLogout);
+}
 
-searchInput.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') {
-    runDemoSearch();
-  }
-});
+if (appPassword) {
+  appPassword.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      handleLogin();
+    }
+  });
+}
 
 checkLoginState();
