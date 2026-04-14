@@ -1,3 +1,12 @@
+const APP_PASSWORD = 'dilse2026';
+
+const loginScreen = document.getElementById('loginScreen');
+const appShell = document.getElementById('appShell');
+const appPassword = document.getElementById('appPassword');
+const loginBtn = document.getElementById('loginBtn');
+const loginMessage = document.getElementById('loginMessage');
+const logoutBtn = document.getElementById('logoutBtn');
+
 const connectionStatus = document.getElementById('connectionStatus');
 const loadEventsBtn = document.getElementById('loadEventsBtn');
 const clearResultsBtn = document.getElementById('clearResultsBtn');
@@ -7,6 +16,18 @@ const searchInput = document.getElementById('searchInput');
 const messageBox = document.getElementById('messageBox');
 const resultsContainer = document.getElementById('resultsContainer');
 
+function showLoginMessage(text, type = 'error') {
+  loginMessage.textContent = text;
+  loginMessage.classList.remove('hidden', 'success', 'error');
+  loginMessage.classList.add(type);
+}
+
+function hideLoginMessage() {
+  loginMessage.textContent = '';
+  loginMessage.classList.add('hidden');
+  loginMessage.classList.remove('success', 'error');
+}
+
 function setStatus(text, type = '') {
   connectionStatus.textContent = text;
   connectionStatus.classList.remove('ok', 'error');
@@ -14,6 +35,51 @@ function setStatus(text, type = '') {
   if (type) {
     connectionStatus.classList.add(type);
   }
+}
+
+function unlockApp() {
+  loginScreen.classList.add('hidden');
+  appShell.classList.remove('hidden');
+  sessionStorage.setItem('frontDeskUnlocked', 'true');
+  setStatus('Ready', 'ok');
+}
+
+function checkLoginState() {
+  const unlocked = sessionStorage.getItem('frontDeskUnlocked');
+
+  if (unlocked === 'true') {
+    unlockApp();
+  }
+}
+
+function handleLogin() {
+  hideLoginMessage();
+
+  const value = appPassword.value.trim();
+
+  if (!value) {
+    showLoginMessage('Please enter the password.', 'error');
+    return;
+  }
+
+  if (value !== APP_PASSWORD) {
+    showLoginMessage('Incorrect password.', 'error');
+    appPassword.value = '';
+    appPassword.focus();
+    return;
+  }
+
+  unlockApp();
+}
+
+function handleLogout() {
+  sessionStorage.removeItem('frontDeskUnlocked');
+  appShell.classList.add('hidden');
+  loginScreen.classList.remove('hidden');
+  appPassword.value = '';
+  hideLoginMessage();
+  setStatus('Not connected');
+  appPassword.focus();
 }
 
 function showMessage(text, type = 'success') {
@@ -98,6 +164,15 @@ function runDemoSearch() {
   showMessage('Demo search completed.', 'success');
 }
 
+loginBtn.addEventListener('click', handleLogin);
+logoutBtn.addEventListener('click', handleLogout);
+
+appPassword.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    handleLogin();
+  }
+});
+
 loadEventsBtn.addEventListener('click', loadDemoEvents);
 clearResultsBtn.addEventListener('click', clearResults);
 searchBtn.addEventListener('click', runDemoSearch);
@@ -108,4 +183,4 @@ searchInput.addEventListener('keydown', (event) => {
   }
 });
 
-setStatus('Ready', 'ok');
+checkLoginState();

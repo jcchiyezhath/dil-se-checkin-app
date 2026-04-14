@@ -7,13 +7,42 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app-shell">
+
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen" class="login-shell">
+    <div class="login-card">
+      <p class="eyebrow">April 18 Event</p>
+      <h1 class="login-title">Front Desk Login</h1>
+      <p class="login-text">Enter password to open the check-in screen.</p>
+
+      <label for="appPassword" class="field-label">Password</label>
+      <input
+        id="appPassword"
+        class="input"
+        type="password"
+        placeholder="Enter password"
+        autocomplete="off"
+      />
+
+      <button id="loginBtn" class="action-btn primary" type="button">
+        Open Front Desk
+      </button>
+
+      <div id="loginMessage" class="message hidden"></div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="appShell" class="app-shell hidden">
     <header class="topbar">
       <div>
         <p class="eyebrow">April 18 Event</p>
         <h1>Front Desk Control</h1>
       </div>
-      <span id="connectionStatus" class="status-pill">Not connected</span>
+      <div class="topbar-actions">
+        <span id="connectionStatus" class="status-pill">Not connected</span>
+        <button id="logoutBtn" class="logout-btn" type="button">Logout</button>
+      </div>
     </header>
 
     <main class="main-grid">

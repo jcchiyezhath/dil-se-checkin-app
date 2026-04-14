@@ -2,14 +2,50 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
+  padding: 0;
   font-family: Arial, sans-serif;
   background: #f4f6f9;
+  color: #1f2937;
+}
+
+body {
+  min-height: 100vh;
 }
 
 .app-shell {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
+}
+
+/* LOGIN */
+.login-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.login-title {
+  margin: 0 0 10px;
+}
+
+.login-text {
+  color: #555;
+  margin: 0 0 18px;
 }
 
 /* HEADER */
@@ -17,17 +53,27 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
   margin-bottom: 20px;
 }
 
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
 h1 {
-  margin: 0;
+  margin-bottom: 0;
 }
 
 .eyebrow {
   font-size: 12px;
   color: gray;
   margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 /* STATUS */
@@ -35,6 +81,19 @@ h1 {
   background: #ddd;
   padding: 8px 12px;
   border-radius: 20px;
+  font-weight: 600;
+}
+
+.status-pill.ok,
+.ok {
+  background: #d9f7e8;
+  color: #156c3f;
+}
+
+.status-pill.error,
+.error {
+  background: #fde2e2;
+  color: #9f1d1d;
 }
 
 /* LAYOUT */
@@ -49,6 +108,15 @@ h1 {
   background: white;
   padding: 20px;
   border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+/* LABELS */
+.field-label,
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
 }
 
 /* BUTTONS */
@@ -60,6 +128,7 @@ h1 {
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
+  font-weight: 700;
 }
 
 .primary {
@@ -69,6 +138,7 @@ h1 {
 
 .secondary {
   background: #ddd;
+  color: #111827;
 }
 
 /* INPUT */
@@ -78,6 +148,7 @@ h1 {
   margin-top: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  background: #ffffff;
 }
 
 /* DIVIDER */
@@ -92,13 +163,42 @@ h1 {
   margin-top: 10px;
 }
 
+.result-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 16px;
+}
+
 /* MESSAGE */
 .message {
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 6px;
+  font-weight: 600;
+}
+
+.message.success {
+  background: #d9f7e8;
+  color: #156c3f;
+}
+
+.message.error {
+  background: #fde2e2;
+  color: #9f1d1d;
 }
 
 .hidden {
   display: none;
+}
+
+@media (max-width: 900px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
