@@ -114,6 +114,32 @@ function toggleHelp() {
   helpBox.style.display = isHidden ? 'block' : 'none';
 }
 
+function calculateTotal() {
+  const ticketPriceInput = document.getElementById('ticketPrice');
+  const ticketQuantityInput = document.getElementById('ticketQuantity');
+  const amountDueInput = document.getElementById('amountDue');
+  const totalResult = document.getElementById('totalResult');
+
+  if (!ticketPriceInput || !ticketQuantityInput || !amountDueInput || !totalResult) return;
+
+  const price = parseFloat(ticketPriceInput.value);
+  const quantity = parseInt(ticketQuantityInput.value, 10);
+
+  if (Number.isNaN(price) || Number.isNaN(quantity) || quantity < 1) {
+    amountDueInput.value = '';
+    totalResult.textContent = 'Please enter a valid ticket price and quantity.';
+    totalResult.style.color = '#991b1b';
+    calculateChange();
+    return;
+  }
+
+  const total = price * quantity;
+  amountDueInput.value = total.toFixed(2);
+  totalResult.textContent = `Total due: $${total.toFixed(2)}`;
+  totalResult.style.color = '#15803d';
+  calculateChange();
+}
+
 function calculateChange() {
   const amountDueInput = document.getElementById('amountDue');
   const amountPaidInput = document.getElementById('amountPaid');
@@ -122,11 +148,18 @@ function calculateChange() {
   if (!amountDueInput || !amountPaidInput || !result) return;
 
   const due = parseFloat(amountDueInput.value);
-  const paid = parseFloat(amountPaidInput.value);
+  const paidText = amountPaidInput.value.trim();
+  const paid = parseFloat(paidText);
 
-  if (Number.isNaN(due) || Number.isNaN(paid)) {
-    result.textContent = 'Please enter both amounts.';
-    result.style.color = '#991b1b';
+  if (Number.isNaN(due)) {
+    result.textContent = '';
+    result.style.color = '';
+    return;
+  }
+
+  if (!paidText || Number.isNaN(paid)) {
+    result.textContent = 'Enter amount paid to see change.';
+    result.style.color = '#555';
     return;
   }
 
@@ -145,6 +178,7 @@ function calculateChange() {
 window.openLink = openLink;
 window.toggleHelp = toggleHelp;
 window.calculateChange = calculateChange;
+window.calculateTotal = calculateTotal;
 
 if (loginBtn) {
   loginBtn.addEventListener('click', handleLogin);
@@ -161,5 +195,23 @@ if (appPassword) {
     }
   });
 }
+
+const ticketPriceInput = document.getElementById('ticketPrice');
+const ticketQuantityInput = document.getElementById('ticketQuantity');
+const amountPaidInput = document.getElementById('amountPaid');
+
+if (ticketPriceInput) {
+  ticketPriceInput.addEventListener('input', calculateTotal);
+}
+
+if (ticketQuantityInput) {
+  ticketQuantityInput.addEventListener('input', calculateTotal);
+}
+
+if (amountPaidInput) {
+  amountPaidInput.addEventListener('input', calculateChange);
+}
+
+calculateTotal();
 
 checkLoginState();
